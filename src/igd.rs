@@ -74,7 +74,7 @@ pub(crate) async fn forward_port(
 pub(crate) async fn add_port(
     ext_port: u16,
     local_addr: SocketAddr,
-    lease_duration: u32,
+    mut lease_duration: u32,
 ) -> Result<(), IgdError> {
     let gateway = igd::aio::search_gateway(SearchOptions::default()).await?;
     dbg!(&gateway);
