@@ -77,10 +77,9 @@ async fn send(peer_addr: SocketAddr, file: File) -> Result<()> {
 }
 
 async fn receive() -> Result<()> {
+    let mut internal_ip: IpAddr = local_ip().expect("Couldn't get internal IP.");
     #[cfg(target_os = "windows")]
     {
-        let mut internal_ip: IpAddr = local_ip().expect("Couldn't get internal IP.");
-
         for adapter in ipconfig::get_adapters()? {
             if adapter.friendly_name() == "Wi-Fi" {
                 //this is most likely the network adapter we are looking for
@@ -88,8 +87,6 @@ async fn receive() -> Result<()> {
             }
         }
     }
-    #[cfg(not(target_os = "windows"))]
-    let internal_ip: IpAddr = local_ip().expect("Couldn't get internal IP.");
 
     let port = port_scanner::request_open_port().expect("Unable to find an available port.");
     let external_ip = public_ip::addr().await;
