@@ -7,9 +7,9 @@
 // Licences for the specific language governing permissions and limitations
 // relating to use of the SAFE Network Software.
 
-use igd::SearchOptions;
 use std::{net::SocketAddr, time::Duration};
 
+use igd::SearchOptions;
 use tokio::time::{self, Instant};
 use tracing::{debug, info, warn};
 
@@ -74,7 +74,7 @@ pub(crate) async fn forward_port(
 pub(crate) async fn add_port(
     ext_port: u16,
     local_addr: SocketAddr,
-    mut lease_duration: u32,
+    lease_duration: u32,
 ) -> Result<(), IgdError> {
     let gateway = igd::aio::search_gateway(SearchOptions::default()).await?;
     dbg!(&gateway);
@@ -90,7 +90,8 @@ pub(crate) async fn add_port(
         }
     };
 
-    #[cfg(target_os = "windows")]{ 
+    #[cfg(target_os = "windows")]
+    {
         lease_duration = 0;
     }
 
